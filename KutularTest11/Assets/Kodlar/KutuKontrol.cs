@@ -2,36 +2,42 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class KutuKontrol : MonoBehaviour {
+public class KutuKontrol : MonoBehaviour
+{
     public GameObject kutu;
     public GameObject parlakKutu;
     public static int genişlik = 6, yükseklik = 8;
-    public static Vector3 tiklananKutu = new Vector3(-1,-1,-1);
+    public static Vector3 tıklananKutu = new Vector3(-1, -1, -1);
     Color[] renkler = new Color[] { Color.red, Color.blue, Color.yellow, Color.green };
     public int kutuSayısı = 64;
     public int yıldız1, yıldız2, yıldız3;
-    public int parlakKutuŞansı = 200;
+    public int parlakKutuŞansı = 50, siyahKutuŞansı = 100;
     int puan = 0;
     float kontrolZamanlayıcı = 2f;
-    public static Kutu KutuVarmı(float x,float y)
+    public static Kutu KutuVarmı(float x, float y)
     {
         Kutu[] kutular = FindObjectsOfType<Kutu>();
         foreach (Kutu item in kutular)
         {
-            if ((Vector2)item.transform.position== new Vector2(x,y))
+            if ((Vector2)item.transform.position == new Vector2(x, y))
             {
                 return item;
             }
         }
         return null;
     }
-    void KutuKoy(float x,float y)
+    void KutuKoy(float x, float y)
     {
         int şans = Random.Range(0, 1000);
         int index = Random.Range(0, renkler.Length);
-        Color kutuRengi= renkler[index];
+        Color kutuRengi = renkler[index];
         GameObject temp;
-        if (şans < parlakKutuŞansı)
+        if (şans < siyahKutuŞansı)
+        {
+            temp = (GameObject)Instantiate(kutu, new Vector2(x, y), Quaternion.identity);
+            kutuRengi = Color.black;
+        }
+        else if (şans < parlakKutuŞansı)
         {
             temp = (GameObject)Instantiate(parlakKutu, new Vector2(x, y), Quaternion.identity);
             temp.GetComponent<Renderer>().material.SetColor("_SpecColor", kutuRengi);
@@ -91,14 +97,62 @@ public class KutuKontrol : MonoBehaviour {
         List<Kutu> patlatılacakKutular = new List<Kutu>();
         foreach (Kutu item in FindObjectsOfType<Kutu>())
         {
-            if (item.GetComponent<Renderer>().material.color==Renk)
+            if (item.GetComponent<Renderer>().material.color == Renk)
             {
                 patlatılacakKutular.Add(item);
             }
         }
         return patlatılacakKutular;
     }
-    void Update () {
+    List<Kutu> EtrafındakiKutularıAl(Kutu kontrolKutusu)
+    {
+        List<Kutu> etrafdakiKutular = new List<Kutu>();
+        Vector2 p = kontrolKutusu.transform.position;
+        Kutu yanKutu;
+        yanKutu = KutuVarmı(p.x - 1, p.y);     //Sol
+        if (yanKutu != null)
+        {
+            etrafdakiKutular.Add(yanKutu);
+        }
+        yanKutu = KutuVarmı(p.x - 1, p.y + 1); //SolÜst
+        if (yanKutu != null)
+        {
+            etrafdakiKutular.Add(yanKutu);
+        }
+        yanKutu = KutuVarmı(p.x, p.y + 1);     //Üst
+        if (yanKutu != null)
+        {
+            etrafdakiKutular.Add(yanKutu);
+        }
+        yanKutu = KutuVarmı(p.x + 1, p.y + 1); //SağÜst
+        if (yanKutu != null)
+        {
+            etrafdakiKutular.Add(yanKutu);
+        }
+        yanKutu = KutuVarmı(p.x + 1, p.y);     //Sağ
+        if (yanKutu != null)
+        {
+            etrafdakiKutular.Add(yanKutu);
+        }
+        yanKutu = KutuVarmı(p.x + 1, p.y - 1); //SağAlt
+        if (yanKutu != null)
+        {
+            etrafdakiKutular.Add(yanKutu);
+        }
+        yanKutu = KutuVarmı(p.x, p.y - 1);     //Alt
+        if (yanKutu != null)
+        {
+            etrafdakiKutular.Add(yanKutu);
+        }
+        yanKutu = KutuVarmı(p.x - 1, p.y - 1); //SolAlt
+        if (yanKutu != null)
+        {
+            etrafdakiKutular.Add(yanKutu);
+        }
+        return etrafdakiKutular;
+    }
+    void Update()
+    {
         kontrolZamanlayıcı -= Time.deltaTime;
         if (kutuSayısı > 0)
         {
@@ -108,23 +162,32 @@ public class KutuKontrol : MonoBehaviour {
                 {
                     KutuKoy(x, yükseklik - 1);
                     kutuSayısı--;
-                    
+
                 }
             }
         }
-        if (tiklananKutu!=new Vector3(-1,-1,-1))
+        if (tıklananKutu != new Vector3(-1, -1, -1))
         {
-            Kutu seçilenKutu = KutuVarmı(tiklananKutu.x, tiklananKutu.y);
+            Kutu seçilenKutu = KutuVarmı(tıklananKutu.x, tıklananKutu.y);
             List<Kutu> patlatılacakKutular;
-            if (tiklananKutu.z == 0)
+            if (tıklananKutu.z == 0) //Tıklanan Kutu Parlaksa
             {
                 patlatılacakKutular = AynıRenkliKutularıAl(seçilenKutu.GetComponent<Renderer>().material.color);
                 puan += Puanla(patlatılacakKutular);
                 KutularıKaldır(patlatılacakKutular);
                 kontrolZamanlayıcı = 2f;
             }
-            else {
-                patlatılacakKutular = TaşırmaAlgoritması((int)tiklananKutu.x, (int)tiklananKutu.y, new bool[genişlik, yükseklik], seçilenKutu.GetComponent<Renderer>().material.color);
+            else if (tıklananKutu.z == 1) //Tıklanan Kutu Siyahsa
+            {
+                patlatılacakKutular = EtrafındakiKutularıAl(seçilenKutu);
+                patlatılacakKutular.Add(seçilenKutu);
+                puan += Puanla(patlatılacakKutular);
+                KutularıKaldır(patlatılacakKutular);
+                kontrolZamanlayıcı = 2f;
+            }
+            else //Normal Kutuya Tıklandıysa
+            {
+                patlatılacakKutular = TaşırmaAlgoritması((int)tıklananKutu.x, (int)tıklananKutu.y, new bool[genişlik, yükseklik], seçilenKutu.GetComponent<Renderer>().material.color);
                 if (patlatılacakKutular.Count > 2)
                 {
                     puan += Puanla(patlatılacakKutular);
@@ -132,15 +195,15 @@ public class KutuKontrol : MonoBehaviour {
                     kontrolZamanlayıcı = 2f;
                 }
             }
-            tiklananKutu = new Vector3(-1, -1,-1);
-            
+            tıklananKutu = new Vector3(-1, -1, -1);
+
         }
-        if (kontrolZamanlayıcı<=0)
+        if (kontrolZamanlayıcı <= 0)
         {
             BölümüBitirme();
             kontrolZamanlayıcı = 2f;
         }
-        
+
     }
     public bool HamleKaldımı()
     {
@@ -150,11 +213,15 @@ public class KutuKontrol : MonoBehaviour {
             {
                 List<Kutu> patlatılacakKutular = new List<Kutu>();
                 Kutu geç = KutuVarmı(x, y);
-                if (geç!=null)
+                if (geç != null)
                 {
                     if (!geç.Patlak)
                     {
                         if (geç.parlak)
+                        {
+                            return true;
+                        }
+                        else if (geç.GetComponent<Renderer>().material.color == Color.black)
                         {
                             return true;
                         }
@@ -164,7 +231,7 @@ public class KutuKontrol : MonoBehaviour {
                             return true;
                         }
                     }
-                }            
+                }
 
             }
         }
@@ -177,12 +244,12 @@ public class KutuKontrol : MonoBehaviour {
         puan = patlayanlar.Count * çoklayıcı;
         return puan;
     }
-    static bool EtrafındaAynıRenkVarmı(float x,float y)
+    static bool EtrafındaAynıRenkVarmı(float x, float y)
     {
         Kutu k = KutuVarmı(x, y);
-        if (k!=null)
+        if (k != null)
         {
-            if (k.AynıRenk(KutuVarmı(x,y+1)))
+            if (k.AynıRenk(KutuVarmı(x, y + 1)))
             {
                 return true;
             }
@@ -190,18 +257,18 @@ public class KutuKontrol : MonoBehaviour {
             {
                 return true;
             }
-            else if (k.AynıRenk(KutuVarmı(x+1, y)))
+            else if (k.AynıRenk(KutuVarmı(x + 1, y)))
             {
                 return true;
             }
-            else if (k.AynıRenk(KutuVarmı(x-1, y)))
+            else if (k.AynıRenk(KutuVarmı(x - 1, y)))
             {
                 return true;
             }
         }
         return false;
     }
-    public static List<Kutu> TaşırmaAlgoritması(int x, int y, bool[,] kontrolEdildi,Color Renk)
+    public static List<Kutu> TaşırmaAlgoritması(int x, int y, bool[,] kontrolEdildi, Color Renk)
     {
         List<Kutu> patlayacak = new List<Kutu>();
         if (x >= 0 && y >= 0 && x < genişlik && y < yükseklik)
@@ -210,7 +277,7 @@ public class KutuKontrol : MonoBehaviour {
             {
                 return patlayacak;
             }
-            Kutu geç= KutuVarmı(x,y);
+            Kutu geç = KutuVarmı(x, y);
             if (geç != null)
             {
                 if (!geç.Patlak)
@@ -226,7 +293,7 @@ public class KutuKontrol : MonoBehaviour {
                     }
                 }
             }
-            if (!EtrafındaAynıRenkVarmı(x,y))
+            if (!EtrafındaAynıRenkVarmı(x, y))
             {
                 return patlayacak;
             }

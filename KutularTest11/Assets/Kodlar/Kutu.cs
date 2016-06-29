@@ -23,7 +23,11 @@ public class Kutu : MonoBehaviour {
         {
             kutuÖzelliği = 0;
         }
-        KutuKontrol.tiklananKutu = new Vector3(transform.position.x,transform.position.y,kutuÖzelliği);
+        else if (GetComponent<Renderer>().material.color==Color.black)
+        {
+            kutuÖzelliği = 1;
+        }
+        KutuKontrol.tıklananKutu = new Vector3(transform.position.x,transform.position.y,kutuÖzelliği);
     }
     public bool AynıRenk(Kutu DiğerKutu)
     {
