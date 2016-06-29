@@ -4,11 +4,13 @@ using System.Collections.Generic;
 
 public class KutuKontrol : MonoBehaviour {
     public GameObject kutu;
+    public GameObject parlakKutu;
     public static int genişlik = 6, yükseklik = 8;
-    public static Vector2 tiklananKutu = new Vector2(-1,-1);
+    public static Vector3 tiklananKutu = new Vector3(-1,-1,-1);
     Color[] renkler = new Color[] { Color.red, Color.blue, Color.yellow, Color.green };
     public int kutuSayısı = 64;
     public int yıldız1, yıldız2, yıldız3;
+    public int parlakKutuŞansı = 200;
     int puan = 0;
     float kontrolZamanlayıcı = 2f;
     public static Kutu KutuVarmı(float x,float y)
@@ -25,9 +27,21 @@ public class KutuKontrol : MonoBehaviour {
     }
     void KutuKoy(float x,float y)
     {
+        int şans = Random.Range(0, 1000);
         int index = Random.Range(0, renkler.Length);
-        GameObject temp = (GameObject)Instantiate(kutu, new Vector2(x, y), Quaternion.identity);
-        temp.GetComponent<Renderer>().material.color = renkler[index];
+        Color kutuRengi= renkler[index];
+        GameObject temp;
+        if (şans < parlakKutuŞansı)
+        {
+            temp = (GameObject)Instantiate(parlakKutu, new Vector2(x, y), Quaternion.identity);
+            temp.GetComponent<Renderer>().material.SetColor("_SpecColor", kutuRengi);
+        }
+        else {
+
+            temp = (GameObject)Instantiate(kutu, new Vector2(x, y), Quaternion.identity);
+
+        }
+        temp.GetComponent<Renderer>().material.color = kutuRengi;
     }
     public void KutularıKaldır(List<Kutu> Kutular)
     {
@@ -72,6 +86,18 @@ public class KutuKontrol : MonoBehaviour {
         //3 = 2 Yıldız
         //4 = 3 YIldız
     }
+    List<Kutu> AynıRenkliKutularıAl(Color Renk)
+    {
+        List<Kutu> patlatılacakKutular = new List<Kutu>();
+        foreach (Kutu item in FindObjectsOfType<Kutu>())
+        {
+            if (item.GetComponent<Renderer>().material.color==Renk)
+            {
+                patlatılacakKutular.Add(item);
+            }
+        }
+        return patlatılacakKutular;
+    }
     void Update () {
         kontrolZamanlayıcı -= Time.deltaTime;
         if (kutuSayısı > 0)
@@ -86,18 +112,27 @@ public class KutuKontrol : MonoBehaviour {
                 }
             }
         }
-        if (tiklananKutu!=new Vector2(-1,-1))
+        if (tiklananKutu!=new Vector3(-1,-1,-1))
         {
-            
-            List<Kutu> patlatılacakKutular = TaşırmaAlgoritması((int)tiklananKutu.x, (int)tiklananKutu.y, new bool[genişlik,yükseklik],KutuVarmı(tiklananKutu.x,tiklananKutu.y).GetComponent<Renderer>().material.color);
-            if (patlatılacakKutular.Count>2)
+            Kutu seçilenKutu = KutuVarmı(tiklananKutu.x, tiklananKutu.y);
+            List<Kutu> patlatılacakKutular;
+            if (tiklananKutu.z == 0)
             {
+                patlatılacakKutular = AynıRenkliKutularıAl(seçilenKutu.GetComponent<Renderer>().material.color);
                 puan += Puanla(patlatılacakKutular);
                 KutularıKaldır(patlatılacakKutular);
                 kontrolZamanlayıcı = 2f;
             }
-
-            tiklananKutu = new Vector2(-1, -1);
+            else {
+                patlatılacakKutular = TaşırmaAlgoritması((int)tiklananKutu.x, (int)tiklananKutu.y, new bool[genişlik, yükseklik], seçilenKutu.GetComponent<Renderer>().material.color);
+                if (patlatılacakKutular.Count > 2)
+                {
+                    puan += Puanla(patlatılacakKutular);
+                    KutularıKaldır(patlatılacakKutular);
+                    kontrolZamanlayıcı = 2f;
+                }
+            }
+            tiklananKutu = new Vector3(-1, -1,-1);
             
         }
         if (kontrolZamanlayıcı<=0)
@@ -119,6 +154,10 @@ public class KutuKontrol : MonoBehaviour {
                 {
                     if (!geç.Patlak)
                     {
+                        if (geç.parlak)
+                        {
+                            return true;
+                        }
                         patlatılacakKutular = TaşırmaAlgoritması((int)geç.transform.position.x, (int)geç.transform.position.y, new bool[genişlik, yükseklik], geç.GetComponent<Renderer>().material.color);
                         if (patlatılacakKutular.Count > 2)
                         {

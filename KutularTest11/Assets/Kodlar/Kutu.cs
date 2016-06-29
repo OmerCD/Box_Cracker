@@ -3,10 +3,7 @@ using System.Collections;
 
 public class Kutu : MonoBehaviour {
     bool patlak;
-<<<<<<< HEAD
-=======
-    //Hasan sen topsun
->>>>>>> origin/master
+    public bool parlak;
     public bool Patlak
     {
         get
@@ -19,10 +16,14 @@ public class Kutu : MonoBehaviour {
             patlak = value;
         }
     }
-
     void OnMouseUpAsButton()
     {
-        KutuKontrol.tiklananKutu = (Vector2)transform.position;
+        int kutuÖzelliği = -1;
+        if (parlak)
+        {
+            kutuÖzelliği = 0;
+        }
+        KutuKontrol.tiklananKutu = new Vector3(transform.position.x,transform.position.y,kutuÖzelliği);
     }
     public bool AynıRenk(Kutu DiğerKutu)
     {

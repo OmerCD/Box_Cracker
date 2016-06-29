@@ -74,6 +74,10 @@
     <Compile Include="Assets\Kodlar\Menü\BolumMantık.cs" />
     <Compile Include="Assets\Kodlar\Menü\MenuSıfırlama.cs" />
     <Compile Include="Assets\Kodlar\Menü\MenuTıklama.cs" />
+    <Compile Include="Assets\_MK\_MKGlow\_Internal\MKGlow.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Assets\_MK\_MKGlow\_Shader\_MKBase\Illumin\MK_Illumin-ParallaxSpec.shader" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\SyntaxTree\UnityVS\2015\UnityVS.CSharp.targets" />
 </Project>

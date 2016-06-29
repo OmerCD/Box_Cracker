@@ -85,11 +85,20 @@
     <Reference Include="UnityEditor.Android.Extensions">
       <HintPath>Library\UnityAssemblies\UnityEditor.Android.Extensions.dll</HintPath>
     </Reference>
+    <Reference Include="UnityEditor.iOS.Extensions">
+      <HintPath>Library\UnityAssemblies\UnityEditor.iOS.Extensions.dll</HintPath>
+    </Reference>
     <Reference Include="UnityEditor.WindowsStandalone.Extensions">
       <HintPath>Library\UnityAssemblies\UnityEditor.WindowsStandalone.Extensions.dll</HintPath>
     </Reference>
     <Reference Include="SyntaxTree.VisualStudio.Unity.Bridge">
       <HintPath>Library\UnityAssemblies\SyntaxTree.VisualStudio.Unity.Bridge.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEditor.iOS.Extensions.Xcode">
+      <HintPath>Library\UnityAssemblies\UnityEditor.iOS.Extensions.Xcode.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEditor.iOS.Extensions.Common">
+      <HintPath>Library\UnityAssemblies\UnityEditor.iOS.Extensions.Common.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -99,23 +108,10 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\unity-ui-extensions\Scripts\Accordion\Editor\AccordionElementEditor.cs" />
-    <Compile Include="Assets\unity-ui-extensions\Scripts\Editor\CanvasGroupActivator.cs" />
-    <Compile Include="Assets\unity-ui-extensions\Scripts\Editor\CompressionTests.cs" />
-    <Compile Include="Assets\unity-ui-extensions\Scripts\Editor\UIExtensionsMenuOptions.cs" />
-    <Compile Include="Assets\unity-ui-extensions\Scripts\Editor\uGUITools.cs" />
+    <Compile Include="Assets\_MK\_MKGlow\_Internal\Editor\MKGlowEditor.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Assets\unity-ui-extensions\Scripts\Utilities\Serialization\Surrogates\SurrogatesReadMe.txt" />
-    <None Include="Assets\unity-ui-extensions\Shaders\SoftMaskShader.shader" />
-    <None Include="Assets\unity-ui-extensions\Shaders\SoftMaskShaderText.shader" />
-    <None Include="Assets\unity-ui-extensions\Shaders\UIAdditive.shader" />
-    <None Include="Assets\unity-ui-extensions\Shaders\UIImageCrop.shader" />
-    <None Include="Assets\unity-ui-extensions\Shaders\UILinearDodge.shader" />
-    <None Include="Assets\unity-ui-extensions\Shaders\UIMultiply.shader" />
-    <None Include="Assets\unity-ui-extensions\Shaders\UIParticleHidden.shader" />
-    <None Include="Assets\unity-ui-extensions\Shaders\UIScreen.shader" />
-    <None Include="Assets\unity-ui-extensions\Shaders\UISoftAdditive.shader" />
+    <None Include="Assets\_MK\_MKGlow\_Shader\_MKBase\Illumin\MK_Illumin-ParallaxSpec.shader" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\SyntaxTree\UnityVS\2015\UnityVS.CSharp.targets" />
 </Project>
