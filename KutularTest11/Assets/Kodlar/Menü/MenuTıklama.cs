@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.SceneManagement;
 
 public class MenuTıklama : MonoBehaviour {
 
@@ -9,47 +10,18 @@ public class MenuTıklama : MonoBehaviour {
 	}
 	
 	// Update is called once per frame
-	void Update () {
-	
+	void Update () {	
 	}
     public void Buton1()
     {
-        Application.LoadLevel("1");
+        SceneManager.LoadScene("LevelMenü");
     }
     public void Buton2()
     {
-        Application.LoadLevel("2");
+        //Ses Kes
     }
     public void Buton3()
     {
-        Application.LoadLevel("3");
-    }
-    public void Buton4()
-    {
-        Application.LoadLevel("4");
-    }
-    public void Buton5()
-    {
-        Application.LoadLevel("5");
-    }
-    public void Buton6()
-    {
-        Application.LoadLevel("6");
-    }
-    public void Buton7()
-    {
-        Application.LoadLevel("7");
-    }
-    public void Buton8()
-    {
-        Application.LoadLevel("8");
-    }
-    public void Buton9()
-    {
-        Application.LoadLevel("9");
-    }
-    public void Buton10()
-    {
-        Application.LoadLevel("10");
-    }
+        //Müzik kes, kelime yapma
+    }       
 }

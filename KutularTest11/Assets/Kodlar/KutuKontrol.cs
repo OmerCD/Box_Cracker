@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.SceneManagement;
 
 public class KutuKontrol : MonoBehaviour
 {
@@ -63,7 +64,7 @@ public class KutuKontrol : MonoBehaviour
         if (HamleKaldımı() == false)// YAPILACAK HAMLE KALMADIYSA OYUNU BİTİR
         {
             //Application.LoadLevel("Anamenü");
-            UnityEngine.SceneManagement.SceneManager.LoadScene("LevelMenü");
+            SceneManager.LoadScene("LevelMenü");
             if (puan >= yıldız1 && puan < yıldız2)
             {
                 Debug.Log(puan.ToString());

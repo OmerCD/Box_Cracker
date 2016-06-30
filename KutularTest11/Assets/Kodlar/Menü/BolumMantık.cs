@@ -3,7 +3,7 @@ using System.Collections;
 using UnityEngine.UI;
 
 public class BolumMantık : MonoBehaviour {
-    public GameObject y1,y2,y3;
+    public Button y1,y2,y3;
 	// Use this for initialization
 	void Start () {
         if (gameObject.name == "Level 1 Buton")
@@ -11,37 +11,37 @@ public class BolumMantık : MonoBehaviour {
             if (PlayerPrefs.GetInt(gameObject.name) == 0)
             {
                 GetComponent<Button>().interactable = true;
-                y1.SetActive(false);
-                y2.SetActive(false);
-                y3.SetActive(false);
+                y1.interactable = false;
+                y2.interactable = false;
+                y3.interactable = false;
             }
             if (PlayerPrefs.GetInt(gameObject.name) == 1)
             {
                 GetComponent<Button>().interactable = true;
-                y1.SetActive(false);
-                y2.SetActive(false);
-                y3.SetActive(false);
+                y1.interactable = false;
+                y2.interactable = false;
+                y3.interactable = false;
             }
             if (PlayerPrefs.GetInt(gameObject.name) == 2)
             {
                 GetComponent<Button>().interactable = true;
-                y1.SetActive(true);
-                y2.SetActive(false);
-                y3.SetActive(false);
+                y1.interactable = true;
+                y2.interactable = false;
+                y3.interactable = false;
             }
             if (PlayerPrefs.GetInt(gameObject.name) == 3)
             {
                 GetComponent<Button>().interactable = true;
-                y1.SetActive(true);
-                y2.SetActive(true);
-                y3.SetActive(false);
+                y1.interactable = true;
+                y2.interactable = true;
+                y3.interactable = false;
             }
             if (PlayerPrefs.GetInt(gameObject.name) == 4)
             {
                 GetComponent<Button>().interactable = true;
-                y1.SetActive(true);
-                y2.SetActive(true);
-                y3.SetActive(true);
+                y1.interactable = true;
+                y2.interactable = true;
+                y3.interactable = true;
             }
         }
         else
@@ -49,37 +49,37 @@ public class BolumMantık : MonoBehaviour {
             if (PlayerPrefs.GetInt(gameObject.name) == 0)
             {
                 GetComponent<Button>().interactable = false;
-                y1.SetActive(false);
-                y2.SetActive(false);
-                y3.SetActive(false);
+                y1.interactable = false;
+                y2.interactable = false;
+                y3.interactable = false;
             }
             if (PlayerPrefs.GetInt(gameObject.name) == 1)
             {
                 GetComponent<Button>().interactable = true;
-                y1.SetActive(false);
-                y2.SetActive(false);
-                y3.SetActive(false);
+                y1.interactable = false;
+                y2.interactable = false;
+                y3.interactable = false;
             }
             if (PlayerPrefs.GetInt(gameObject.name) == 2)
             {
                 GetComponent<Button>().interactable = true;
-                y1.SetActive(true);
-                y2.SetActive(false);
-                y3.SetActive(false);
+                y1.interactable = true;
+                y2.interactable = false;
+                y3.interactable = false;
             }
             if (PlayerPrefs.GetInt(gameObject.name) == 3)
             {
                 GetComponent<Button>().interactable = true;
-                y1.SetActive(true);
-                y2.SetActive(true);
-                y3.SetActive(false);
+                y1.interactable = true;
+                y2.interactable = true;
+                y3.interactable = false;
             }
             if (PlayerPrefs.GetInt(gameObject.name) == 4)
             {
                 GetComponent<Button>().interactable = true;
-                y1.SetActive(true);
-                y2.SetActive(true);
-                y3.SetActive(true);
+                y1.interactable = true;
+                y2.interactable = true;
+                y3.interactable = true;
             }
         }
     }
