@@ -54,8 +54,7 @@ public class KutuKontrol : MonoBehaviour
     {
         foreach (Kutu item in Kutular)
         {
-            item.Patlak = true;
-            Destroy(item.gameObject);
+            item.Patlat();
         }
     }
     void BölümüBitirme()
@@ -65,6 +64,11 @@ public class KutuKontrol : MonoBehaviour
         {
             //Application.LoadLevel("Anamenü");
             SceneManager.LoadScene("LevelMenü");
+            int öncekiPuan = PlayerPrefs.GetInt("Level " + Application.loadedLevel + " Buton");
+            if(puan<öncekiPuan)
+            {
+                return;
+            }
             if (puan >= yıldız1 && puan < yıldız2)
             {
                 Debug.Log(puan.ToString());
@@ -98,9 +102,13 @@ public class KutuKontrol : MonoBehaviour
         List<Kutu> patlatılacakKutular = new List<Kutu>();
         foreach (Kutu item in FindObjectsOfType<Kutu>())
         {
-            if (item.GetComponent<Renderer>().material.color == Renk)
+            Renderer rend = item.GetComponent<Renderer>();
+            if (rend!=null)
             {
-                patlatılacakKutular.Add(item);
+                if (rend.material.color == Renk)
+                {
+                    patlatılacakKutular.Add(item);
+                }
             }
         }
         return patlatılacakKutular;
@@ -152,6 +160,21 @@ public class KutuKontrol : MonoBehaviour
         }
         return etrafdakiKutular;
     }
+    int SiyahKutuPatlaması(Kutu SeçilenKutu){
+        List<Kutu> patlatılacakKutular = EtrafındakiKutularıAl(SeçilenKutu);
+        int puan = 0;
+        foreach (Kutu item in patlatılacakKutular)
+        {
+            if (!item.Patlak && item.GetComponent<Renderer>().material.color==Color.black)
+            {
+                item.Patlak = true;
+                puan += SiyahKutuPatlaması(item);
+            }
+        }
+        patlatılacakKutular.Add(SeçilenKutu);
+        KutularıKaldır(patlatılacakKutular);
+        return Puanla(patlatılacakKutular)+puan;
+    }
     void Update()
     {
         kontrolZamanlayıcı -= Time.deltaTime;
@@ -180,10 +203,7 @@ public class KutuKontrol : MonoBehaviour
             }
             else if (tıklananKutu.z == 1) //Tıklanan Kutu Siyahsa
             {
-                patlatılacakKutular = EtrafındakiKutularıAl(seçilenKutu);
-                patlatılacakKutular.Add(seçilenKutu);
-                puan += Puanla(patlatılacakKutular);
-                KutularıKaldır(patlatılacakKutular);
+                puan += SiyahKutuPatlaması(seçilenKutu);
                 kontrolZamanlayıcı = 2f;
             }
             else //Normal Kutuya Tıklandıysa

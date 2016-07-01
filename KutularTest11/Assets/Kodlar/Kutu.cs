@@ -29,6 +29,11 @@ public class Kutu : MonoBehaviour {
         }
         KutuKontrol.tıklananKutu = new Vector3(transform.position.x,transform.position.y,kutuÖzelliği);
     }
+    public void Patlat()
+    {
+        patlak = true;
+        Destroy(gameObject);
+    }
     public bool AynıRenk(Kutu DiğerKutu)
     {
         if (DiğerKutu == null)
